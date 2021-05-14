@@ -1,0 +1,1 @@
+enum MetricType { target, actual }
