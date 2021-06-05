@@ -91,4 +91,8 @@ class Metric {
         metricType.hashCode ^
         term.hashCode;
   }
+
+  Metric setTargett(int target) {
+    this.target = target;
+  }
 }

@@ -1,6 +1,6 @@
 import 'package:metriccalculator/utils/model/metric.dart';
 import 'package:path_provider/path_provider.dart';
-
+import 'dart:convert';
 import 'package:sqflite/sqflite.dart';
 import 'dart:async';
 import 'dart:io';
@@ -50,16 +50,39 @@ class MetricDbHelper {
 
   Future<List> getMetricList() async {
     Database db = await this.db;
+    List metricList = new List<Metric>();
     var result =
         await db.rawQuery("SELECT * FROM $tblMetric ORDER BY $colId ASC");
-    return result;
+    print(result.toList());
+    result.toList().forEach((element) {
+      //  metricList.add(Metric.fromJson(element.toString()));
+      metricList.add(Metric.fromMap(element));
+      //  print("bir de böyle deneyelim $element");
+    });
+
+    return metricList;
   }
 
-  Future getMetricById(int metricId) async {
+  Future<Metric> getMetricById(int metricId) async {
     Database db = await this.db;
     var result =
         await db.rawQuery("SELECT * FROM $tblMetric WHERE $colId=$metricId");
-    return result;
+    Metric metric = Metric.fromMap(result.toList()[0]);
+    print("metric geldi $metric");
+    return metric;
+  }
+
+  Future getMetricByNameAndType(String name, String type) async {
+    String metricName = name;
+    String metricType = type;
+    List metricList = new List<Metric>();
+    Database db = await this.db;
+    var result = await db.rawQuery(
+        "SELECT * FROM $tblMetric WHERE $colMetricName = '$metricName' AND $colMetricType='$metricType'");
+    result.toList().forEach((element) {
+      metricList.add(Metric.fromMap(element));
+    });
+    return metricList;
   }
 
   Future getMetricByNameAndTypeAndTerm(Metric metric) async {
@@ -69,7 +92,20 @@ class MetricDbHelper {
     Database db = await this.db;
     var result = await db.rawQuery(
         "SELECT * FROM $tblMetric WHERE $colMetricName = $metricName AND $colMetricType=$metricType AND $colMetricTerm=$metricTerm");
-    return result;
+    Metric metricc = Metric.fromMap(result.toList()[0]);
+    return metricc;
+  }
+
+  Future getMetricByNameAndTypeAndTermP(
+      String name, int term, String type) async {
+    String metricName = name;
+    String metricType = type;
+    int metricTerm = term;
+    Database db = await this.db;
+    var result = await db.rawQuery(
+        "SELECT * FROM $tblMetric WHERE $colMetricName = '$metricName' AND $colMetricType='$metricType' AND $colMetricTerm=$metricTerm");
+    Metric metricc = Metric.fromMap(result.toList()[0]);
+    return metricc;
   }
 
   Future<List<String>> getEmptyMetric() async {

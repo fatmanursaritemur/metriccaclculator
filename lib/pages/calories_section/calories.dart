@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:metriccalculator/utils/model/metric.dart';
+import 'package:metriccalculator/utils/service/metricService.dart';
 import 'dart:math';
-
-import '../header_info.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 class CaloriesPage extends StatefulWidget {
   static String tag = 'calories-page';
@@ -10,10 +11,75 @@ class CaloriesPage extends StatefulWidget {
 }
 
 class _CaloriesPageState extends State<CaloriesPage> {
+  List<Metric> metricList = List<Metric>();
+  List<Metric> metricTarget = List<Metric>();
+  List<Metric> metricActual = List<Metric>();
+  MetricService metricService = new MetricService();
+  String dropdownValue = "TotalCallNumber";
   int index = 0;
+  List<Widget> caloriesDownColumn = [];
+  List<Widget> caloriesUpColumn = [];
+
+  hydiol(String name) async {
+    print("hydra ol'a girdi");
+    List<Metric> targetMetric =
+        await metricService.getMetricByNameAndTarget(name);
+    print("target'ı aldı");
+    List<Metric> actualMetric =
+        await metricService.getMetricByNameAndActual(name);
+    print("actualı aldı");
+    setState(() {
+      // metricList = itemsKeysList;
+      metricTarget = targetMetric;
+      metricActual = actualMetric;
+    });
+    changeValue();
+  }
+
+  changeValue() {
+    caloriesUpColumn.clear();
+    for (var i = 0; i < 12; i++) {
+      print(metricActual[i].toString());
+      var _height = metricActual[i].target;
+      caloriesUpColumn.add(
+        Container(
+          width: 7.0,
+          height: _height.toDouble(),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(3.0),
+              topRight: Radius.circular(3.0),
+            ),
+            color: Colors.white,
+          ),
+        ),
+      );
+    }
+
+    caloriesDownColumn.clear();
+    for (var i = 0; i < 12; i++) {
+      var _height = metricTarget[i].getTarget / 10;
+
+      caloriesDownColumn.add(
+        Container(
+          width: 7.0,
+          height: _height.toDouble(),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(3.0),
+              bottomRight: Radius.circular(3.0),
+            ),
+            color: Colors.white.withOpacity(0.6),
+          ),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    // print(this.metricTarget[0]);
+    metricService.setAllMetricByActual();
     var calories = 1000;
     List<Widget> caloriesList = [];
 
@@ -53,47 +119,6 @@ class _CaloriesPageState extends State<CaloriesPage> {
       firstHour += 2;
     }
 
-    List<Widget> caloriesUpColumn = [];
-
-    for (var i = 0; i < 20; i++) {
-      var _height = Random().nextInt(100);
-      if (_height < 35) _height = 0;
-      caloriesUpColumn.add(
-        Container(
-          width: 5.0,
-          height: _height.toDouble(),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(3.0),
-              topRight: Radius.circular(3.0),
-            ),
-            color: Colors.white,
-          ),
-        ),
-      );
-    }
-
-    List<Widget> caloriesDownColumn = [];
-
-    for (var i = 1; i <= 20; i++) {
-      var _height = 15 + Random().nextInt(90);
-
-      if (_height >= 85) _height = 0;
-
-      caloriesDownColumn.add(
-        Container(
-          width: 5.0,
-          height: _height.toDouble(),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(3.0),
-              bottomRight: Radius.circular(3.0),
-            ),
-            color: Colors.white.withOpacity(0.6),
-          ),
-        ),
-      );
-    }
     return Scaffold(
       backgroundColor: Color(0xFFEAEAEA),
       body: Padding(
@@ -103,12 +128,35 @@ class _CaloriesPageState extends State<CaloriesPage> {
           physics: BouncingScrollPhysics(),
           child: Column(
             children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(right: 16.0),
-                child: HeaderInfo(
-                  isMain: false,
-                  sectionTitle: 'Calories',
+              DropdownButton<String>(
+                value: dropdownValue,
+                icon: const Icon(Icons.arrow_downward),
+                iconSize: 24,
+                elevation: 16,
+                style: const TextStyle(color: Colors.deepPurple),
+                underline: Container(
+                  height: 2,
+                  color: Colors.deepPurpleAccent,
                 ),
+                onChanged: (String newValue) {
+                  hydiol(newValue);
+                  setState(() {
+                    dropdownValue = newValue;
+                  });
+                },
+                items: <String>[
+                  'CallResolutionRate',
+                  'TotalCallNumber',
+                  'CallAnsweringRate',
+                  'CallPerformance',
+                  'CallQuality',
+                  'CallTime'
+                ].map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
               ),
               Container(
                 height: 85 + (MediaQuery.of(context).size.height * 0.45),
@@ -133,7 +181,8 @@ class _CaloriesPageState extends State<CaloriesPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Text(
-                                  'Burned',
+                                  // metricTarget[0].getMetricName,
+                                  dropdownValue,
                                   style: TextStyle(
                                     color: Color(0xFFA5A5A5),
                                     fontSize: 14.0,
@@ -564,7 +613,32 @@ class _CaloriesPageState extends State<CaloriesPage> {
           ),
         ),
       ),
+      floatingActionButton: _getFAB(context),
     );
+  }
+
+  Widget _getFAB(BuildContext context) {
+    //https://stackoverflow.com/questions/55166999/how-to-make-two-floating-action-button-in-flutter
+    return SpeedDial(
+        animatedIcon: AnimatedIcons.menu_close,
+        animatedIconTheme: IconThemeData(size: 22),
+        backgroundColor: Color(0xFF801E48),
+        visible: true,
+        curve: Curves.bounceIn,
+        children: [
+          // FAB 1
+          SpeedDialChild(
+              child: Icon(Icons.post_add),
+              backgroundColor: Color(0xFF801E48),
+              onTap: () {},
+              label: 'Yeni Görev',
+              labelStyle: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  color: Colors.white,
+                  fontSize: 16.0),
+              labelBackgroundColor: Color(0xFF801E48))
+          // FAB 2
+        ]);
   }
 }
 

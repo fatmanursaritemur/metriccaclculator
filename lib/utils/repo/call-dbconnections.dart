@@ -68,7 +68,7 @@ class CallDbHelper {
         "$colType TEXT, $colOutcome TEXT,"
         "$colServer TEXT,"
         "$colVruLine TEXT,"
-        "$colCustomerId INTEGER,"
+        "$colCustomerId TEXT,"
         "$colPriority INTEGER,"
         "$colDate INTEGER,"
         "$colVruEntry TEXT,"
@@ -86,15 +86,25 @@ class CallDbHelper {
   Future<List> getCall() async {
     Database db = await this.db;
     var result = await db.rawQuery("SELECT * FROM $tblCall");
-    print(result);
+    print("uzunluk su:${result.toList().length}");
+    result.toList().forEach((element) {
+      //  print(element);
+    });
     return result;
   }
 
   Future<List> getCallByMonth(int startTime, int endTime) async {
     Database db = await this.db;
+    List callList = new List<Call>();
     var result = await db.rawQuery(
         "SELECT * FROM $tblCall WHERE $colDate>$startTime AND $colDate<$endTime ORDER BY $colPriority ASC");
-    return result;
+    result.toList().forEach((element) {
+      //  metricList.add(Metric.fromJson(element.toString()));
+      callList.add(Call.fromMapToDb(element));
+      //  print("bir de böyle deneyelim $element");
+    });
+
+    return callList;
   }
 
   /*Future<int> getTotalVruEntryByMonth(int startTime, int endTime) async {
@@ -113,44 +123,52 @@ class CallDbHelper {
     return value;
   }*/
 
-  Future<int> getTotalVruTimeByMonth(int startTime, int endTime) async { // çağrı karşılama hızı
+  Future<int> getTotalVruTimeByMonth(int startTime, int endTime) async {
+    // çağrı karşılama hızı
     Database db = await this.db;
     var result = await db.rawQuery(
-        "SELECT avg($colVruTime) FROM $tblCall WHERE $colDate>$startTime AND $colDate<$endTime ORDER BY $colPriority ASC");
-    int value = result[0]["avg($colVruTime)"];
+        "SELECT avg($colVruTime) FROM $tblCall WHERE $colDate>$startTime AND $colDate<$endTime");
+    int value = result[0]["avg($colVruTime)"].toInt();
     return value;
   }
-  
-  Future<int> getTotalSerTimeByMonth(int startTime, int endTime) async { // çağrı süresi
+
+  deleteAllData() async {
+    Database db = await this.db;
+    var result = await db.rawQuery("DELETE from $tblCall ");
+    return result;
+  }
+
+  Future<int> getTotalSerTimeByMonth(int startTime, int endTime) async {
+    // çağrı süresi
     Database db = await this.db;
     var result = await db.rawQuery(
         "SELECT avg($colSerTime) FROM $tblCall WHERE $colDate>$startTime AND $colDate<$endTime ORDER BY $colPriority ASC");
-    int value = result[0]["avg($colSerTime)"];
+    int value = result[0]["avg($colSerTime)"].toInt();
     return value;
   }
-  
-  Future<int> getTotalQTimeByMonth(int startTime, int endTime) async { // çağrı çözüm hızı
+
+  Future<int> getTotalQTimeByMonth(int startTime, int endTime) async {
+    // çağrı çözüm hızı
     Database db = await this.db;
     var result = await db.rawQuery(
         "SELECT avg($colQTime) FROM $tblCall WHERE $colDate>$startTime AND $colDate<$endTime ORDER BY $colPriority ASC");
-    int value = result[0]["avg($colQTime)"];
+    int value = result[0]["avg($colQTime)"].toInt();
     return value;
   }
-  
-  Future<int> getHangCountByMonth(int startTime, int endTime) async { // çağrı çözüm hızı
+
+  Future<int> getHangCountByMonth(int startTime, int endTime) async {
+    // çağrı çözüm hızı
     Database db = await this.db;
     var result = await db.rawQuery(
         "SELECT avg($colQTime) FROM $tblCall WHERE $colOutcome='HANG' ORDER BY $colPriority ASC");
-    int value = result[0]["avg($colQTime)"];
+    int value = result[0]["avg($colQTime)"].toInt();
     return value;
   }
 
   Future<Call> insertCall(Call call) async {
-    print("insert'e girdi");
     Database db = await this.db;
-    print("db bolumunu geçri -- insert");
     call.callId = await db.insert(tblCall, call.toMap());
-    print("insert etti");
+    // print("insert etti");
     return call;
   }
 }

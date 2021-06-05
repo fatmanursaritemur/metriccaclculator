@@ -3,11 +3,11 @@ import 'package:metriccalculator/radial_progress.dart';
 import 'package:metriccalculator/utils/service/callService.dart';
 
 class CaloriesSection extends StatelessWidget {
-  CallService callService = new CallService();
+  //CallService callService = new CallService();
 
   @override
   Widget build(BuildContext context) {
-    callService.loadCallFromJson();
+    //callService.loadCallFromJson();
     return Container(
       width: double.infinity,
       height: double.infinity,

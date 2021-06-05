@@ -4,7 +4,7 @@ import 'dart:convert';
 class Call {
   String vruLine;
   int callId;
-  int customerId;
+  String customerId;
   int priority;
   String type;
   int date;
@@ -66,7 +66,7 @@ class Call {
     return Call(
       vruLine: map['vruline'],
       callId: int.parse(map['call_id']),
-      customerId: int.parse(map['customer_id']),
+      customerId: map['customer_id'],
       priority: int.parse(map['priority']),
       type: map['type'],
       date: int.parse(map['date']),
@@ -80,6 +80,28 @@ class Call {
       serStart: map['ser_start'],
       serExit: map['ser_exit'],
       serTime: int.parse(map['ser_time']),
+      server: map['server'],
+    );
+  }
+
+  factory Call.fromMapToDb(Map<String, dynamic> map) {
+    return Call(
+      vruLine: map['vruline'],
+      callId: map['call_id'],
+      customerId: map['customer_id'].toString(),
+      priority: map['priority'],
+      type: map['type'],
+      date: map['date'],
+      vruEntry: map['vru_entry'],
+      vruExit: map['vru_exit'],
+      vruTime: map['vru_time'],
+      qStart: map['q_start'],
+      qExit: map['q_exit'],
+      qTime: map['q_time'],
+      outcome: map['outcome'],
+      serStart: map['ser_start'],
+      serExit: map['ser_exit'],
+      serTime: map['ser_time'],
       server: map['server'],
     );
   }
