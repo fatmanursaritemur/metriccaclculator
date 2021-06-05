@@ -7,11 +7,13 @@ import 'package:metriccalculator/pages/header_info.dart';
 import 'package:metriccalculator/pages/sections.dart';
 import 'package:metriccalculator/utils/model/call.dart';
 import 'package:metriccalculator/utils/model/metric.dart';
+import 'package:metriccalculator/utils/service/metricService.dart';
 
 import '../utils/service/callService.dart';
 
 class MainPage extends StatefulWidget {
   static String tag = 'main-page';
+
   @override
   MainPageState createState() {
     return new MainPageState();
@@ -19,6 +21,8 @@ class MainPage extends StatefulWidget {
 }
 
 class MainPageState extends State<MainPage> {
+  CallService callService = new CallService();
+  MetricService metricService = new MetricService();
   /*  saveBigList() async {
     String data = await DefaultAssetBundle.of(context).loadString("/aa.json");
     //List jsonList = jsonResult.map((Call call) => call.toJson()).toList();
@@ -47,6 +51,9 @@ class MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
+    metricService.getMetricList();
+    //  metricService.getMetricByNameAndActual("CallResolutionRate");
+    // callService.getCallList();
     var _widthFull = MediaQuery.of(context).size.width;
 
     return Scaffold(

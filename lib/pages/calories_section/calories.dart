@@ -18,8 +18,13 @@ class _CaloriesPageState extends State<CaloriesPage> {
   MetricService metricService = new MetricService();
   String dropdownValue = "TotalCallNumber";
   int index = 0;
+
   List<Widget> caloriesDownColumn = [];
+
   List<Widget> caloriesUpColumn = [];
+
+  List<String> actual = List.filled(12, " 0");
+  List<String> target = List.filled(12, " 0");
 
   hydiol(String name) async {
     print("hydra ol'a girdi");
@@ -31,8 +36,19 @@ class _CaloriesPageState extends State<CaloriesPage> {
     print("actualı aldı");
     setState(() {
       // metricList = itemsKeysList;
+      List<String> tTarget = new List<String>();
+      List<String> tActual = new List<String>();
       metricTarget = targetMetric;
       metricActual = actualMetric;
+      print("sssss $metricActual");
+      metricTarget.forEach((element) {
+        tTarget.add(element.target.toString());
+      });
+      target = tTarget;
+      metricActual.forEach((element) {
+        tActual.add(element.target.toString());
+      });
+      actual = tActual;
     });
     changeValue();
   }
@@ -42,6 +58,10 @@ class _CaloriesPageState extends State<CaloriesPage> {
     for (var i = 0; i < 12; i++) {
       print(metricActual[i].toString());
       var _height = metricActual[i].target;
+      actual.add(
+        '$_height',
+      );
+
       caloriesUpColumn.add(
         Container(
           width: 7.0,
@@ -60,7 +80,10 @@ class _CaloriesPageState extends State<CaloriesPage> {
     caloriesDownColumn.clear();
     for (var i = 0; i < 12; i++) {
       var _height = metricTarget[i].getTarget / 10;
-
+      print(_height);
+      target.add(
+        '$_height',
+      );
       caloriesDownColumn.add(
         Container(
           width: 7.0,
@@ -94,16 +117,15 @@ class _CaloriesPageState extends State<CaloriesPage> {
           style: TextStyle(color: Colors.white, fontSize: 12.0),
         ),
       );
-
       calories -= 500;
     }
 
-    List<Widget> hourList = [];
-    var firstHour = 6;
-    var amPm = 'am';
+    List<Widget> monthList = [];
+    var firstHour = 1;
+    var amPm = '.Ay';
 
-    for (var i = 0; i < 9; i++) {
-      hourList.add(
+    for (var i = 0; i < 12; i++) {
+      monthList.add(
         Text(
           '$firstHour $amPm',
           style: TextStyle(
@@ -112,12 +134,7 @@ class _CaloriesPageState extends State<CaloriesPage> {
           ),
         ),
       );
-      if (firstHour == 12) {
-        firstHour = 0;
-        amPm = 'pm';
-      }
-
-      firstHour += 2;
+      firstHour += 1;
     }
 
     return Scaffold(
@@ -129,6 +146,15 @@ class _CaloriesPageState extends State<CaloriesPage> {
           physics: BouncingScrollPhysics(),
           child: Column(
             children: <Widget>[
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    'Metrik Secimi',
+                    style: TextStyle(color: Color(0xFFA5A5A5), fontSize: 14.0),
+                  ),
+                ],
+              ),
               DropdownButton<String>(
                 value: dropdownValue,
                 icon: const Icon(Icons.arrow_downward),
@@ -183,43 +209,11 @@ class _CaloriesPageState extends State<CaloriesPage> {
                               children: <Widget>[
                                 Text(
                                   // metricTarget[0].getMetricName,
-                                  dropdownValue,
+                                  dropdownValue +
+                                      ' Metriği için Yıllık Raporlama Grafiği',
                                   style: TextStyle(
-                                    color: Color(0xFFA5A5A5),
-                                    fontSize: 14.0,
+                                    fontSize: 16.0,
                                   ),
-                                ),
-                                Text(
-                                  '3642 kcal',
-                                  style: TextStyle(fontSize: 20.0),
-                                ),
-                              ],
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Text(
-                                  'Target',
-                                  style: TextStyle(
-                                      color: Color(0xFFA5A5A5), fontSize: 14.0),
-                                ),
-                                Text(
-                                  '3900 kcal',
-                                  style: TextStyle(fontSize: 20.0),
-                                ),
-                              ],
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Text(
-                                  'Consumed',
-                                  style: TextStyle(
-                                      color: Color(0xFFA5A5A5), fontSize: 14.0),
-                                ),
-                                Text(
-                                  '4729 kcal',
-                                  style: TextStyle(fontSize: 20.0),
                                 ),
                               ],
                             ),
@@ -266,7 +260,7 @@ class _CaloriesPageState extends State<CaloriesPage> {
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
-                                children: hourList,
+                                children: monthList,
                               ),
                             ),
                             Padding(
@@ -341,124 +335,6 @@ class _CaloriesPageState extends State<CaloriesPage> {
                         ),
                       ),
                     ),
-                    Positioned(
-                      bottom: 0.0,
-                      left: 40.0,
-                      child: Stack(
-                        children: <Widget>[
-                          Material(
-                            elevation: 5.0,
-                            borderRadius: BorderRadius.circular(40.0),
-                            child: Container(
-                              width: MediaQuery.of(context).size.width - 80,
-                              height: 40.0,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(40.0),
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            top: 5.0,
-                            left: 5 +
-                                (MediaQuery.of(context).size.width - 90) /
-                                    4 *
-                                    index,
-                            child: Container(
-                              width:
-                                  (MediaQuery.of(context).size.width - 90) / 4,
-                              height: 30.0,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(30.0),
-                                gradient: LinearGradient(
-                                  colors: [
-                                    Color(0xFFFEA600),
-                                    Color(0xFFDE3E20),
-                                  ],
-                                  begin: Alignment.centerLeft,
-                                  end: Alignment.centerRight,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 24.0, vertical: 10.0),
-                            width: MediaQuery.of(context).size.width - 80,
-                            height: 40.0,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                InkWell(
-                                  onTap: () {
-                                    setState(() {
-                                      index = 0;
-                                    });
-                                  },
-                                  child: Text(
-                                    'Today',
-                                    style: TextStyle(
-                                      color: index == 0
-                                          ? Colors.white
-                                          : Colors.grey,
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
-                                InkWell(
-                                  onTap: () {
-                                    setState(() {
-                                      index = 1;
-                                    });
-                                  },
-                                  child: Text(
-                                    'Weeks',
-                                    style: TextStyle(
-                                      color: index == 1
-                                          ? Colors.white
-                                          : Colors.grey,
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
-                                InkWell(
-                                  onTap: () {
-                                    setState(() {
-                                      index = 2;
-                                    });
-                                  },
-                                  child: Text(
-                                    'Months',
-                                    style: TextStyle(
-                                      color: index == 2
-                                          ? Colors.white
-                                          : Colors.grey,
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
-                                InkWell(
-                                  onTap: () {
-                                    setState(() {
-                                      index = 3;
-                                    });
-                                  },
-                                  child: Text(
-                                    'Years',
-                                    style: TextStyle(
-                                      color: index == 3
-                                          ? Colors.white
-                                          : Colors.grey,
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
                   ],
                 ),
               ),
@@ -483,7 +359,7 @@ class _CaloriesPageState extends State<CaloriesPage> {
                         padding: const EdgeInsets.only(
                             left: 16.0, top: 5.0, bottom: 5.0),
                         child: Text(
-                          'Activities',
+                          dropdownValue,
                           style: TextStyle(fontSize: 18.0),
                         ),
                       ),
@@ -500,52 +376,105 @@ class _CaloriesPageState extends State<CaloriesPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Text(
-                                  'Gym workout',
+                                  'Yılın İlk Ayı     ',
                                   style: TextStyle(fontSize: 15.0),
                                 ),
                                 Text(
-                                  '1:30 hours, Biceps & Triceps',
+                                  'Gerçek Değer:',
+                                  style: TextStyle(fontSize: 13.0),
+                                ),
+                                Text(
+                                  //listeden değer gelecek,
+                                  actual[0],
+
                                   style: TextStyle(
                                     fontSize: 12.0,
-                                    color: Colors.grey,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                Text(
+                                  'Hedef Değer:',
+                                  style: TextStyle(fontSize: 13.0),
+                                ),
+                                Text(
+                                  //listeden değer gelecek,
+                                  target[0],
+                                  style: TextStyle(
+                                    fontSize: 12.0,
+                                    color: Colors.black,
                                   ),
                                 ),
                               ],
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(right: 16.0),
-                              child: Text(
-                                '-847 kcal',
-                                style: TextStyle(color: Color(0xFFEC6A13)),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Container(
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            top: 8.0, left: 16.0, bottom: 5.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                Text('Running',
-                                    style: TextStyle(fontSize: 15.0)),
-                                Text('5.0 km',
-                                    style: TextStyle(
-                                        fontSize: 12.0, color: Colors.grey)),
+                                Text(
+                                  'Yılın İkinci Ayı ',
+                                  style: TextStyle(fontSize: 15.0),
+                                ),
+                                Text(
+                                  'Gerçek Değer:',
+                                  style: TextStyle(fontSize: 13.0),
+                                ),
+                                Text(
+                                  //listeden değer gelecek,
+                                  actual[1],
+                                  style: TextStyle(
+                                    fontSize: 12.0,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                Text(
+                                  'Hedef Değer:',
+                                  style: TextStyle(fontSize: 13.0),
+                                ),
+                                Text(
+                                  //listeden değer gelecek,
+                                  target[1],
+                                  style: TextStyle(
+                                    fontSize: 12.0,
+                                    color: Colors.black,
+                                  ),
+                                ),
                               ],
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(right: 16.0),
-                              child: Text(
-                                '-1127 kcal',
-                                style: TextStyle(color: Color(0xFFEC6A13)),
-                              ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  'Yılın Üçüncü Ayı',
+                                  style: TextStyle(fontSize: 15.0),
+                                ),
+                                Text(
+                                  'Gerçek Değer:',
+                                  style: TextStyle(fontSize: 13.0),
+                                ),
+                                Text(
+                                  //listeden değer gelecek,
+                                  actual[2],
+                                  style: TextStyle(
+                                    fontSize: 12.0,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                Text(
+                                  'Hedef Değer:',
+                                  style: TextStyle(fontSize: 13.0),
+                                ),
+                                Text(
+                                  //listeden değer gelecek,
+                                  target[2],
+                                  style: TextStyle(
+                                    fontSize: 12.0,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[],
                             ),
                           ],
                         ),
@@ -562,46 +491,105 @@ class _CaloriesPageState extends State<CaloriesPage> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                Text('Breakfast',
-                                    style: TextStyle(fontSize: 15.0)),
-                                Text('2 Eggs, White bread, Orange juice',
-                                    style: TextStyle(
-                                        fontSize: 12.0, color: Colors.grey)),
+                                Text(
+                                  'Yılın Dördüncü Ayı',
+                                  style: TextStyle(fontSize: 15.0),
+                                ),
+                                Text(
+                                  'Gerçek Değer:',
+                                  style: TextStyle(fontSize: 13.0),
+                                ),
+                                Text(
+                                  //listeden değer gelecek,
+                                  actual[3],
+                                  style: TextStyle(
+                                    fontSize: 12.0,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                Text(
+                                  'Hedef Değer:',
+                                  style: TextStyle(fontSize: 13.0),
+                                ),
+                                Text(
+                                  //listeden değer gelecek,
+                                  target[3],
+                                  style: TextStyle(
+                                    fontSize: 12.0,
+                                    color: Colors.black,
+                                  ),
+                                ),
                               ],
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(right: 16.0),
-                              child: Text(
-                                '+768 kcal',
-                                style: TextStyle(color: Color(0xFFEC6A13)),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Container(
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            top: 5.0, left: 16.0, bottom: 5.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                Text('Walk', style: TextStyle(fontSize: 15.0)),
-                                Text('1.2 km',
-                                    style: TextStyle(
-                                        fontSize: 12.0, color: Colors.grey)),
+                                Text(
+                                  'Yılın Beşinci Ayı',
+                                  style: TextStyle(fontSize: 15.0),
+                                ),
+                                Text(
+                                  'Gerçek Değer:',
+                                  style: TextStyle(fontSize: 13.0),
+                                ),
+                                Text(
+                                  //listeden değer gelecek,
+                                  actual[4],
+                                  style: TextStyle(
+                                    fontSize: 12.0,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                Text(
+                                  'Hedef Değer:',
+                                  style: TextStyle(fontSize: 13.0),
+                                ),
+                                Text(
+                                  //listeden değer gelecek,
+                                  target[4],
+                                  style: TextStyle(
+                                    fontSize: 12.0,
+                                    color: Colors.black,
+                                  ),
+                                ),
                               ],
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(right: 16.0),
-                              child: Text(
-                                '-142 kcal',
-                                style: TextStyle(color: Color(0xFFEC6A13)),
-                              ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  'Yılın Altıncı Ayı',
+                                  style: TextStyle(fontSize: 15.0),
+                                ),
+                                Text(
+                                  'Gerçek Değer:',
+                                  style: TextStyle(fontSize: 13.0),
+                                ),
+                                Text(
+                                  //listeden değer gelecek,
+                                  actual[5],
+                                  style: TextStyle(
+                                    fontSize: 12.0,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                Text(
+                                  'Hedef Değer:',
+                                  style: TextStyle(fontSize: 13.0),
+                                ),
+                                Text(
+                                  //listeden değer gelecek,
+                                  target[5],
+                                  style: TextStyle(
+                                    fontSize: 12.0,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[],
                             ),
                           ],
                         ),
@@ -703,15 +691,7 @@ class CaloriesHeader extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
-              'Week 7, Day 2',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 14.0,
-                fontFamily: 'JosefinSans',
-              ),
-            ),
-            Text(
-              'Today, ${now.day}nd, $month, ${now.year}',
+              'Bugün, ${now.day}nd, $month, ${now.year}',
               style: TextStyle(color: Colors.white, fontSize: 18.0),
             ),
           ],
@@ -731,7 +711,7 @@ class CaloriesHeader extends StatelessWidget {
                     width: 5.0,
                   ),
                   Text(
-                    'Burned',
+                    'Gerçek',
                     style: TextStyle(color: Colors.white, fontSize: 13.0),
                   ),
                 ],
@@ -747,7 +727,7 @@ class CaloriesHeader extends StatelessWidget {
                     width: 5.0,
                   ),
                   Text(
-                    'Consumed',
+                    'Hedef',
                     style: TextStyle(color: Colors.white, fontSize: 13.0),
                   ),
                 ],

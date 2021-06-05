@@ -63,6 +63,11 @@ class MetricDbHelper {
     return metricList;
   }
 
+ deleteAllData() async {
+    Database db = await this.db;
+    var result = await db.rawQuery("DELETE from $tblMetric");
+    return result;
+  }
   Future<Metric> getMetricById(int metricId) async {
     Database db = await this.db;
     var result =
@@ -76,9 +81,11 @@ class MetricDbHelper {
     String metricName = name;
     String metricType = type;
     List metricList = new List<Metric>();
+    print("buraya geldi");
     Database db = await this.db;
     var result = await db.rawQuery(
         "SELECT * FROM $tblMetric WHERE $colMetricName = '$metricName' AND $colMetricType='$metricType'");
+    print("result ${result.toList().length}");
     result.toList().forEach((element) {
       metricList.add(Metric.fromMap(element));
     });

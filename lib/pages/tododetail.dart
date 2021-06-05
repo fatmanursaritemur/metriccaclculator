@@ -341,7 +341,6 @@ class TodoDetailState extends State<TodoDetail> {
       Navigator.pop(context, true);
     }
   }
-
   void updatePriority(String value) {
     switch (value) {
       case 'High':
@@ -354,12 +353,10 @@ class TodoDetailState extends State<TodoDetail> {
         todo.priority = 3;
         break;
     }
-
     setState(() {
       _priority = value;
     });
   }
-
   void updateIsDone(String value) {
     switch (value) {
       case 'false':
@@ -369,26 +366,21 @@ class TodoDetailState extends State<TodoDetail> {
         todo.isDone = 2;
         break;
     }
-
     setState(() {
       _isdone = value;
     });
   }
-
   String retrievePriority(int value) {
     return _priorities[value - 1];
   }
-
   String retrieveIsDone(int value) {
     return _isdones[value - 1];
   }
-
   void updateTitle() {
     setState(() {
       todo.title = titleController.text;
     });
   }
-
   void updateDescription() {
     setState(() {
       todo.description = descriptionController.text;

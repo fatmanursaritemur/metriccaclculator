@@ -13,6 +13,9 @@ class MetricService {
 
   MetricService() {
     // There's a better way to do this, stay tuned.
+    //loadCallFromJson();
+    //  metricDbHelper.deleteAllData();
+    // loadCallFromJson();
   }
   MetricDbHelper metricDbHelper = new MetricDbHelper();
   CallService callService = new CallService();
@@ -43,7 +46,11 @@ class MetricService {
     print("****name and target*****");
     List<Metric> metricFuture =
         await metricDbHelper.getMetricByNameAndType(name, "target");
-    /*  metricFuture.then((result) {
+    print("metric için target'a gekdi");
+    metricFuture.forEach((element) {
+      print("elementler eldi ${element}");
+    });
+    /* metricFuture.then((result) {
       //List<Call> todoList = List<Call>();
       for (int i = 0; i < result.length; i++) {
         this.metricTargetListByName.add(Metric.fromObject(result[i]));
@@ -70,13 +77,13 @@ class MetricService {
     metricDbHelper.updateMetric(metricupdated);
   }
 
-  setAllMetricByActual() {
-    setAverageCallAnsweringRateByMonthActual();
-    setAverageCallPerformanceByMonthActual();
-    setAverageCallQualityByMonthActual();
-    setAverageCallResolutionRateByMonthActual();
-    setAverageCallTimeByMonthActual();
-    setTotalCallsNumberByMonthActual();
+  setAllMetricByActual() async {
+    await setAverageCallAnsweringRateByMonthActual();
+    await setAverageCallPerformanceByMonthActual();
+    await setAverageCallQualityByMonthActual();
+    await setAverageCallResolutionRateByMonthActual();
+    await setAverageCallTimeByMonthActual();
+    await setTotalCallsNumberByMonthActual();
   }
 
   setTotalCallsNumberByMonthActual() async {

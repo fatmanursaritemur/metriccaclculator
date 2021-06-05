@@ -107,22 +107,6 @@ class CallDbHelper {
     return callList;
   }
 
-  /*Future<int> getTotalVruEntryByMonth(int startTime, int endTime) async {
-    Database db = await this.db;
-    var result = await db.rawQuery(
-        "SELECT Sum($colVruEntry) FROM $tblCall WHERE $colDate>$startTime AND $colDate<$endTime ORDER BY $colPriority ASC");
-    int value = result[0]["SUM($colVruEntry)"];
-    return value;
-  }
-
-  Future<int> getTotalVruExitByMonth(int startTime, int endTime) async {
-    Database db = await this.db;
-    var result = await db.rawQuery(
-        "SELECT Sum($colVruExit) FROM $tblCall WHERE $colDate>$startTime AND $colDate<$endTime ORDER BY $colPriority ASC");
-    int value = result[0]["SUM($colVruExit)"];
-    return value;
-  }*/
-
   Future<int> getTotalVruTimeByMonth(int startTime, int endTime) async {
     // çağrı karşılama hızı
     Database db = await this.db;
