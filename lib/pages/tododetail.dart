@@ -18,10 +18,7 @@ class TodoDetail extends StatefulWidget {
 class TodoDetailState extends State<TodoDetail> {
   List<Metric> metricList;
   bool isEditt;
-  final _priorities = ["High", "Medium", "Low"];
-  final _isdones = ["false", "true"];
-  String _priority = "Low";
-  String _isdone = "false";
+
   TextEditingController titleController = TextEditingController();
   bool isEdit;
   final _formKey = GlobalKey<FormState>();
@@ -29,7 +26,7 @@ class TodoDetailState extends State<TodoDetail> {
   void initState() {
     super.initState();
     isEdit = isEditt == false ? false : true;
-    titleController.text = metricList[0].metricName;
+    titleController.text = metricList[0].target.toString();
   }
 
   TodoDetailState(this.metricList, this.isEdit);
@@ -46,18 +43,21 @@ class TodoDetailState extends State<TodoDetail> {
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.indigoAccent,
       body: Padding(
-        padding: const EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 0.0),
+        padding: const EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 00.0),
         child: Column(
           children: <Widget>[
+            SizedBox(
+              height: 15.0,
+            ),
             Text(
-              metricList[0].getMetricName,
+              metricList[0].metricName,
               style: TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 20.0,
                   color: Colors.white),
             ),
             SizedBox(
-              height: 40.0,
+              height: 15.0,
             ),
             Container(
               margin: EdgeInsets.symmetric(vertical: 20.0),
@@ -81,6 +81,7 @@ class TodoDetailState extends State<TodoDetail> {
                   key: _formKey,
                   child: ListView(
                     children: <Widget>[
+                      Text("ocak"),
                       TextFormField(
                           maxLength: 30,
                           onSaved: (value) {
@@ -96,14 +97,14 @@ class TodoDetailState extends State<TodoDetail> {
                             }
                           },
                           keyboardType: TextInputType.text,
-                          controller: titleController,
                           style: textStyle,
                           decoration: InputDecoration(
-                            hintText: 'ocak ayı',
+                            hintText: metricList[0].target.toString(),
                             contentPadding:
                                 EdgeInsets.symmetric(vertical: 15.0),
                             labelStyle: textStyle,
                           )),
+                      Text("şubat"),
                       TextFormField(
                           maxLength: 50,
                           onSaved: (value) {
@@ -115,7 +116,7 @@ class TodoDetailState extends State<TodoDetail> {
                           ], // Only
                           style: textStyle,
                           decoration: InputDecoration(
-                            hintText: 'şubat ayı',
+                            hintText: metricList[1].target.toString(),
                             contentPadding:
                                 EdgeInsets.symmetric(vertical: 15.0),
                             labelStyle: textStyle,
