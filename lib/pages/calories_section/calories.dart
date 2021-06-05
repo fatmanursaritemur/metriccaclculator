@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:metriccalculator/pages/tododetail.dart';
 import 'package:metriccalculator/utils/model/metric.dart';
 import 'package:metriccalculator/utils/service/metricService.dart';
 import 'dart:math';
@@ -617,6 +618,13 @@ class _CaloriesPageState extends State<CaloriesPage> {
     );
   }
 
+  void navigateToDetail(List<Metric> metricTarget) async {
+    bool result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => TodoDetail(metricTarget, false)),
+    );
+  }
+
   Widget _getFAB(BuildContext context) {
     //https://stackoverflow.com/questions/55166999/how-to-make-two-floating-action-button-in-flutter
     return SpeedDial(
@@ -630,7 +638,9 @@ class _CaloriesPageState extends State<CaloriesPage> {
           SpeedDialChild(
               child: Icon(Icons.post_add),
               backgroundColor: Color(0xFF801E48),
-              onTap: () {},
+              onTap: () {
+                navigateToDetail(metricTarget);
+              },
               label: 'Yeni Görev',
               labelStyle: TextStyle(
                   fontWeight: FontWeight.w500,
