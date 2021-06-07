@@ -53,9 +53,7 @@ class MetricDbHelper {
     List metricList = new List<Metric>();
     var result =
         await db.rawQuery("SELECT * FROM $tblMetric ORDER BY $colId ASC");
-    print(result.toList());
     result.toList().forEach((element) {
-      //  metricList.add(Metric.fromJson(element.toString()));
       metricList.add(Metric.fromMap(element));
       //  print("bir de böyle deneyelim $element");
     });
@@ -63,11 +61,12 @@ class MetricDbHelper {
     return metricList;
   }
 
- deleteAllData() async {
+  deleteAllData() async {
     Database db = await this.db;
     var result = await db.rawQuery("DELETE from $tblMetric");
     return result;
   }
+
   Future<Metric> getMetricById(int metricId) async {
     Database db = await this.db;
     var result =
@@ -98,7 +97,7 @@ class MetricDbHelper {
     int metricTerm = metric.getTerm;
     Database db = await this.db;
     var result = await db.rawQuery(
-        "SELECT * FROM $tblMetric WHERE $colMetricName = $metricName AND $colMetricType=$metricType AND $colMetricTerm=$metricTerm");
+        "SELECT * FROM $tblMetric WHERE $colMetricName = '$metricName' AND $colMetricType= '$metricType' AND $colMetricTerm= '$metricTerm'");
     Metric metricc = Metric.fromMap(result.toList()[0]);
     return metricc;
   }

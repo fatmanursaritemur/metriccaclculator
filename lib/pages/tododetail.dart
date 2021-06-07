@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:metriccalculator/pages/calories_section/calories.dart';
 import 'package:metriccalculator/utils/model/metric.dart';
 import 'package:metriccalculator/utils/repo/metric-dbconnections.dart';
 import 'package:flutter/services.dart';
+import 'package:metriccalculator/utils/service/metricService.dart';
 
 MetricDbHelper helper = MetricDbHelper();
 
@@ -16,8 +18,10 @@ class TodoDetail extends StatefulWidget {
 }
 
 class TodoDetailState extends State<TodoDetail> {
+  final globalKey = GlobalKey<ScaffoldState>();
   List<Metric> metricList;
   bool isEditt;
+  MetricService metricService = new MetricService();
 
   TextEditingController titleController = TextEditingController();
   bool isEdit;
@@ -81,22 +85,28 @@ class TodoDetailState extends State<TodoDetail> {
                   key: _formKey,
                   child: ListView(
                     children: <Widget>[
-                      Text("ocak"),
+                      Text("Ocak"),
                       TextFormField(
                           maxLength: 30,
                           onSaved: (value) {
-                            metricList[0].setTarget = value;
+                            metricList[0].target = int.parse(value);
                           },
                           validator: (value) {
                             if (value.isEmpty) {
-                              return 'null_title';
+                              return metricList[0].target.toString();
                             }
 
                             if (value.length > 30) {
                               return 'limit_title';
                             }
+                            initialValue:
+                            metricList[0].target;
                           },
-                          keyboardType: TextInputType.text,
+                          initialValue: metricList[0].target.toString(),
+                          keyboardType: TextInputType.number,
+                          inputFormatters: <TextInputFormatter>[
+                            FilteringTextInputFormatter.digitsOnly
+                          ],
                           style: textStyle,
                           decoration: InputDecoration(
                             hintText: metricList[0].target.toString(),
@@ -104,12 +114,21 @@ class TodoDetailState extends State<TodoDetail> {
                                 EdgeInsets.symmetric(vertical: 15.0),
                             labelStyle: textStyle,
                           )),
-                      Text("şubat"),
+                      Text("Şubat"),
                       TextFormField(
-                          maxLength: 50,
+                          maxLength: 20,
                           onSaved: (value) {
-                            metricList[1].setTarget = value;
+                            metricList[1].target = int.parse(value);
                           },
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return metricList[1].target.toString();
+                            }
+                            if (value.length > 30) {
+                              return 'limit_title';
+                            }
+                          },
+                          initialValue: metricList[1].target.toString(),
                           keyboardType: TextInputType.number,
                           inputFormatters: <TextInputFormatter>[
                             FilteringTextInputFormatter.digitsOnly
@@ -121,162 +140,191 @@ class TodoDetailState extends State<TodoDetail> {
                                 EdgeInsets.symmetric(vertical: 15.0),
                             labelStyle: textStyle,
                           )),
+                      Text("Mart"),
                       TextFormField(
                           maxLength: 50,
                           onSaved: (value) {
-                            metricList[2].setTarget = value;
+                            metricList[2].setTarget = int.parse(value);
                           },
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return metricList[2].target.toString();
+                            }
+
+                            if (value.length > 30) {
+                              return 'limit_title';
+                            }
+                          },
+                          initialValue: metricList[2].target.toString(),
                           keyboardType: TextInputType.number,
                           inputFormatters: <TextInputFormatter>[
                             FilteringTextInputFormatter.digitsOnly
                           ],
                           style: textStyle,
                           decoration: InputDecoration(
-                            hintText: 'şubat ayı',
+                            hintText: metricList[2].target.toString(),
                             contentPadding:
                                 EdgeInsets.symmetric(vertical: 15.0),
                             labelStyle: textStyle,
                           )),
+                      Text("Nisan"),
                       TextFormField(
                           maxLength: 50,
                           onSaved: (value) {
-                            metricList[3].setTarget = value;
+                            metricList[3].setTarget = int.parse(value);
                           },
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return metricList[3].target.toString();
+                            }
+
+                            if (value.length > 30) {
+                              return 'limit_title';
+                            }
+                          },
+                          initialValue: metricList[3].target.toString(),
                           keyboardType: TextInputType.number,
                           inputFormatters: <TextInputFormatter>[
                             FilteringTextInputFormatter.digitsOnly
                           ],
                           style: textStyle,
                           decoration: InputDecoration(
-                            hintText: 'şubat ayı',
+                            hintText: metricList[3].target.toString(),
                             contentPadding:
                                 EdgeInsets.symmetric(vertical: 15.0),
                             labelStyle: textStyle,
                           )),
+                      Text("Mayıs"),
                       TextFormField(
                           maxLength: 50,
                           onSaved: (value) {
-                            metricList[4].setTarget = value;
+                            metricList[4].setTarget = int.parse(value);
                           },
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return metricList[4].target.toString();
+                            }
+
+                            if (value.length > 30) {
+                              return 'limit_title';
+                            }
+                          },
+                          initialValue: metricList[4].target.toString(),
                           keyboardType: TextInputType.number,
                           inputFormatters: <TextInputFormatter>[
                             FilteringTextInputFormatter.digitsOnly
                           ],
                           style: textStyle,
                           decoration: InputDecoration(
-                            hintText: 'şubat ayı',
+                            hintText: metricList[4].target.toString(),
                             contentPadding:
                                 EdgeInsets.symmetric(vertical: 15.0),
                             labelStyle: textStyle,
                           )),
+                      Text("Haziran"),
                       TextFormField(
                           maxLength: 50,
                           onSaved: (value) {
-                            metricList[5].setTarget = value;
+                            metricList[5].setTarget = int.parse(value);
                           },
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return metricList[5].target.toString();
+                            }
+
+                            if (value.length > 30) {
+                              return 'limit_title';
+                            }
+                          },
+                          initialValue: metricList[5].target.toString(),
                           keyboardType: TextInputType.number,
                           inputFormatters: <TextInputFormatter>[
                             FilteringTextInputFormatter.digitsOnly
                           ],
                           style: textStyle,
                           decoration: InputDecoration(
-                            hintText: 'şubat ayı',
+                            hintText: metricList[5].target.toString(),
                             contentPadding:
                                 EdgeInsets.symmetric(vertical: 15.0),
                             labelStyle: textStyle,
                           )),
+                      Text("Temmuz"),
                       TextFormField(
                           maxLength: 50,
                           onSaved: (value) {
-                            metricList[6].setTarget = value;
+                            metricList[6].setTarget = int.parse(value);
                           },
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return metricList[6].target.toString();
+                            }
+
+                            if (value.length > 30) {
+                              return 'limit_title';
+                            }
+                          },
+                          initialValue: metricList[6].target.toString(),
                           keyboardType: TextInputType.number,
                           inputFormatters: <TextInputFormatter>[
                             FilteringTextInputFormatter.digitsOnly
                           ],
                           style: textStyle,
                           decoration: InputDecoration(
-                            hintText: 'şubat ayı',
+                            hintText: metricList[6].target.toString(),
                             contentPadding:
                                 EdgeInsets.symmetric(vertical: 15.0),
                             labelStyle: textStyle,
                           )),
+                      Text("Ağustos"),
                       TextFormField(
                           maxLength: 50,
                           onSaved: (value) {
-                            metricList[7].setTarget = value;
+                            metricList[7].setTarget = int.parse(value);
                           },
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return metricList[7].target.toString();
+                            }
+
+                            if (value.length > 30) {
+                              return 'limit_title';
+                            }
+                          },
+                          initialValue: metricList[7].target.toString(),
                           keyboardType: TextInputType.number,
                           inputFormatters: <TextInputFormatter>[
                             FilteringTextInputFormatter.digitsOnly
                           ],
                           style: textStyle,
                           decoration: InputDecoration(
-                            hintText: 'şubat ayı',
+                            hintText: metricList[7].target.toString(),
                             contentPadding:
                                 EdgeInsets.symmetric(vertical: 15.0),
                             labelStyle: textStyle,
                           )),
+                      Text("Eylül"),
                       TextFormField(
                           maxLength: 50,
                           onSaved: (value) {
-                            metricList[8].setTarget = value;
+                            metricList[8].setTarget = int.parse(value);
                           },
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return metricList[8].target.toString();
+                            }
+
+                            if (value.length > 30) {
+                              return 'limit_title';
+                            }
+                          },
+                          initialValue: metricList[8].target.toString(),
                           keyboardType: TextInputType.number,
                           inputFormatters: <TextInputFormatter>[
                             FilteringTextInputFormatter.digitsOnly
                           ],
                           style: textStyle,
                           decoration: InputDecoration(
-                            hintText: 'şubat ayı',
-                            contentPadding:
-                                EdgeInsets.symmetric(vertical: 15.0),
-                            labelStyle: textStyle,
-                          )),
-                      TextFormField(
-                          maxLength: 50,
-                          onSaved: (value) {
-                            metricList[9].setTarget = value;
-                          },
-                          keyboardType: TextInputType.number,
-                          inputFormatters: <TextInputFormatter>[
-                            FilteringTextInputFormatter.digitsOnly
-                          ],
-                          style: textStyle,
-                          decoration: InputDecoration(
-                            hintText: 'şubat ayı',
-                            contentPadding:
-                                EdgeInsets.symmetric(vertical: 15.0),
-                            labelStyle: textStyle,
-                          )),
-                      TextFormField(
-                          maxLength: 50,
-                          onSaved: (value) {
-                            metricList[10].setTarget = value;
-                          },
-                          keyboardType: TextInputType.number,
-                          inputFormatters: <TextInputFormatter>[
-                            FilteringTextInputFormatter.digitsOnly
-                          ],
-                          style: textStyle,
-                          decoration: InputDecoration(
-                            hintText: 'şubat ayı',
-                            contentPadding:
-                                EdgeInsets.symmetric(vertical: 15.0),
-                            labelStyle: textStyle,
-                          )),
-                      TextFormField(
-                          maxLength: 50,
-                          onSaved: (value) {
-                            metricList[11].setTarget = value;
-                          },
-                          keyboardType: TextInputType.number,
-                          inputFormatters: <TextInputFormatter>[
-                            FilteringTextInputFormatter.digitsOnly
-                          ],
-                          style: textStyle,
-                          decoration: InputDecoration(
-                            hintText: 'şubat ayı',
+                            hintText: metricList[8].target.toString(),
                             contentPadding:
                                 EdgeInsets.symmetric(vertical: 15.0),
                             labelStyle: textStyle,
@@ -290,10 +338,9 @@ class TodoDetailState extends State<TodoDetail> {
                         color: Colors.amber,
                         //onPressed: () => save(),
                         onPressed: () {
-                          //    helper.deleteTodo(todo.id);
-                          //buraya delete gelecek
-                          Navigator.of(context).pop();
-                          Navigator.pop(context, true);
+                          update(metricList);
+                          Navigator.of(context);
+                          Navigator.pop(context, false);
                         },
                         child: Text(
                           isEdit ? "Edit" : "Add",
@@ -312,9 +359,10 @@ class TodoDetailState extends State<TodoDetail> {
       floatingActionButton: isEdit
           ? FloatingActionButton(
               onPressed: () {
-                debugPrint("Click Floated Back.");
+                Navigator.of(context);
+                Navigator.pop(context, false);
+                // debugPrint("Click Floated Back.");
                 //confirmDelete();
-                //confirm delete
               },
               elevation: 5.0,
               backgroundColor: Colors.red,
@@ -328,88 +376,41 @@ class TodoDetailState extends State<TodoDetail> {
     );
   }
 
-/*
-  void save() {
+  final snackBar = SnackBar(
+    content: Text("Bu Benim İlk Mesajım."),
+    backgroundColor: Colors.red,
+    action: SnackBarAction(
+      textColor: Colors.white,
+      label: "Test Butonu",
+      onPressed: () {
+        // Buraya Butona Tıklayınca Yapılacak Olaylar Yazılacak.
+      },
+    ),
+  );
+
+  void _showSnackBar(BuildContext context, String message) {
+    Scaffold.of(context).showSnackBar(SnackBar(
+      content: Text(message),
+      duration: const Duration(milliseconds: 100),
+    ));
+  }
+
+  void updateTarget(int value, int i) {
+    setState(() {
+      metricList[i].target = value;
+    });
+  }
+
+  void update(List<Metric> metricList) {
     final form = _formKey.currentState;
     if (form.validate()) {
       form.save();
-      todo.date = new DateFormat.yMd().format(DateTime.now());
-      if (todo.id != null) {
-        helper.updateTodo(todo);
-      } else {
-        helper.insertTodo(todo);
+
+      for (int i = 0; i < metricList.length; i++) {
+        metricService.updateMetric(metricList[i]);
+        print("update etti");
       }
-      Navigator.pop(context, true);
     }
-  }
-  void updatePriority(String value) {
-    switch (value) {
-      case 'High':
-        todo.priority = 1;
-        break;
-      case 'Medium':
-        todo.priority = 2;
-        break;
-      case 'Low':
-        todo.priority = 3;
-        break;
-    }
-    setState(() {
-      _priority = value;
-    });
-  }
-  void updateIsDone(String value) {
-    switch (value) {
-      case 'false':
-        todo.isDone = 1;
-        break;
-      case 'true':
-        todo.isDone = 2;
-        break;
-    }
-    setState(() {
-      _isdone = value;
-    });
-  }
-  String retrievePriority(int value) {
-    return _priorities[value - 1];
-  }
-  String retrieveIsDone(int value) {
-    return _isdones[value - 1];
-  }
-  void updateTitle() {
-    setState(() {
-      todo.title = titleController.text;
-    });
-  }
-  void updateDescription() {
-    setState(() {
-      todo.description = descriptionController.text;
-    });
-  }*/
-  void confirmDelete() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) => AlertDialog(
-        title: Text('sure_delate', style: TextStyle(fontSize: 15.0)),
-        actions: <Widget>[
-          new FlatButton(
-              child: new Text('CANCEL'),
-              onPressed: () => Navigator.of(context).pop()),
-          new FlatButton(
-              child: new Text(
-                'DELETE',
-                style:
-                    TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
-              ),
-              onPressed: () {
-                //    helper.deleteTodo(todo.id);
-                //buraya delete gelecek
-                Navigator.of(context).pop();
-                Navigator.pop(context, true);
-              })
-        ],
-      ),
-    );
+    metricService.setAllMetricByActual();
   }
 }

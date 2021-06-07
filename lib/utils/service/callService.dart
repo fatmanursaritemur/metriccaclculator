@@ -56,11 +56,10 @@ class CallService {
   }
 
   Future<int> getTotalCallsNumberByMonth(int month) async {
-    Random random = new Random();
     List<Call> callList = await getCallListByMonth(month);
 
     //return this.calllistMonthly.length;
-    return ((callList.length + random.nextInt(10000)) / 100).toInt();
+    return ((callList.length + 10000) / 100).toInt();
   }
 
   Future<int> getAverageCallAnsweringRateByMonth(int month) async {
@@ -88,7 +87,6 @@ class CallService {
   }
 
   Future<int> getAverageCallPerformanceByMonth(int month) async {
-    Random random = new Random();
     int startDate = 990000 + month * 100;
     int endDate = 990000 + (month + 1) * 100;
     int averageHangCallTime =
@@ -97,8 +95,7 @@ class CallService {
     int callTimeByMonth = await getAverageCallTimeByMonth(month);
     int result = ((averageHangCallTime * 5 +
                 callCountByMonth * 1 +
-                callTimeByMonth * 1 +
-                random.nextInt(1000)) /
+                callTimeByMonth * 5) /
             30)
         .toInt();
     return result;

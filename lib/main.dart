@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         fontFamily: 'Oswald',
       ),
-      home: MainPage(),
+      home: CaloriesPage(),
       routes: pages,
     );
   }

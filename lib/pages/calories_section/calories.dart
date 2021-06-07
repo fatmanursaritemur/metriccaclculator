@@ -18,7 +18,7 @@ class _CaloriesPageState extends State<CaloriesPage> {
   MetricService metricService = new MetricService();
   String dropdownValue = "TotalCallNumber";
   int index = 0;
-
+  bool isSelected = false;
   List<Widget> caloriesDownColumn = [];
 
   List<Widget> caloriesUpColumn = [];
@@ -98,12 +98,18 @@ class _CaloriesPageState extends State<CaloriesPage> {
         ),
       );
     }
+    return;
+  }
+
+  setMetric() async {
+    await metricService.setAllMetricByActual();
   }
 
   @override
   Widget build(BuildContext context) {
     // print(this.metricTarget[0]);
-    metricService.setAllMetricByActual();
+    // setMetric();
+    hydiol(dropdownValue);
     var calories = 1000;
     List<Widget> caloriesList = [];
 
@@ -169,6 +175,7 @@ class _CaloriesPageState extends State<CaloriesPage> {
                   hydiol(newValue);
                   setState(() {
                     dropdownValue = newValue;
+                    isSelected = true;
                   });
                 },
                 items: <String>[
@@ -212,7 +219,7 @@ class _CaloriesPageState extends State<CaloriesPage> {
                                   dropdownValue +
                                       ' Metriği için Yıllık Raporlama Grafiği',
                                   style: TextStyle(
-                                    fontSize: 16.0,
+                                    fontSize: 15.0,
                                   ),
                                 ),
                               ],
@@ -376,7 +383,7 @@ class _CaloriesPageState extends State<CaloriesPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Text(
-                                  'Yılın İlk Ayı     ',
+                                  'Birinci Ay     ',
                                   style: TextStyle(fontSize: 15.0),
                                 ),
                                 Text(
@@ -410,7 +417,7 @@ class _CaloriesPageState extends State<CaloriesPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Text(
-                                  'Yılın İkinci Ayı ',
+                                  'İkinci Ay   ',
                                   style: TextStyle(fontSize: 15.0),
                                 ),
                                 Text(
@@ -443,7 +450,7 @@ class _CaloriesPageState extends State<CaloriesPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Text(
-                                  'Yılın Üçüncü Ayı',
+                                  'Üçüncü Ayı  ',
                                   style: TextStyle(fontSize: 15.0),
                                 ),
                                 Text(
@@ -492,7 +499,7 @@ class _CaloriesPageState extends State<CaloriesPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Text(
-                                  'Yılın Dördüncü Ayı',
+                                  'Dördüncü Ay ',
                                   style: TextStyle(fontSize: 15.0),
                                 ),
                                 Text(
@@ -525,7 +532,7 @@ class _CaloriesPageState extends State<CaloriesPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Text(
-                                  'Yılın Beşinci Ayı',
+                                  'Beşinci Ay ',
                                   style: TextStyle(fontSize: 15.0),
                                 ),
                                 Text(
@@ -558,7 +565,7 @@ class _CaloriesPageState extends State<CaloriesPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Text(
-                                  'Yılın Altıncı Ayı',
+                                  'Altıncı Ay ',
                                   style: TextStyle(fontSize: 15.0),
                                 ),
                                 Text(
@@ -614,6 +621,9 @@ class _CaloriesPageState extends State<CaloriesPage> {
   }
 
   Widget _getFAB(BuildContext context) {
+    //   if (isSelected == false) {
+    //   print("secim yapılmadı");
+    // } else {
     //https://stackoverflow.com/questions/55166999/how-to-make-two-floating-action-button-in-flutter
     return SpeedDial(
         animatedIcon: AnimatedIcons.menu_close,
@@ -624,12 +634,15 @@ class _CaloriesPageState extends State<CaloriesPage> {
         children: [
           // FAB 1
           SpeedDialChild(
-              child: Icon(Icons.post_add),
+              child: Icon(Icons.change_circle),
               backgroundColor: Color(0xFF801E48),
               onTap: () {
                 navigateToDetail(metricTarget);
+                setState(() {
+                  this.dropdownValue = metricTarget[0].metricName;
+                });
               },
-              label: 'Yeni Görev',
+              label: 'Hedef Değişikliği',
               labelStyle: TextStyle(
                   fontWeight: FontWeight.w500,
                   color: Colors.white,
@@ -638,6 +651,7 @@ class _CaloriesPageState extends State<CaloriesPage> {
           // FAB 2
         ]);
   }
+//  }
 }
 
 class CaloriesHeader extends StatelessWidget {

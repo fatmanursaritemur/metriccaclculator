@@ -24,20 +24,15 @@ class MetricService {
   }
 
   loadCallFromJson() async {
-    print("loada girdi");
     String data = await rootBundle.loadString('assets/metrics.json');
-    print("json'u aldı");
     List<Metric> list = new List();
     var jsonlist = jsonDecode(data.toString()) as List;
     jsonlist.forEach((e) {
-      print("**,$e");
       metricDbHelper.insertMetric(Metric.fromMap(e));
     });
-    print("load etti");
   }
 
   Future<List<Metric>> getMetricList() async {
-    print("**********Metric List");
     List<Metric> metricFuture = await metricDbHelper.getMetricList();
     return metricFuture;
   }
@@ -66,13 +61,15 @@ class MetricService {
     return metricFuture;
   }
 
-  Metric getMetric(Metric metricc) {
-    return Metric.fromObject(
-        metricDbHelper.getMetricByNameAndTypeAndTerm(metricc));
+  Future<Metric> getMetric(Metric metricc) async {
+    // return Metric.fromObject(
+    Metric metric = await metricDbHelper.getMetricByNameAndTypeAndTerm(metricc);
+
+    return metric;
   }
 
-  updateMetric(Metric metric) {
-    Metric metricupdated = getMetric(metric);
+  updateMetric(Metric metric) async {
+    Metric metricupdated = await getMetric(metric);
     metricupdated.setTarget = metric.getTarget;
     metricDbHelper.updateMetric(metricupdated);
   }
@@ -130,8 +127,8 @@ class MetricService {
     for (int i = 1; i < 13; i++) {
       Metric metricUpdate = await metricDbHelper.getMetricByNameAndTypeAndTermP(
           "CallPerformance", i, "actual");
-      int target = await (callService.getAverageCallPerformanceByMonth(i));
-      metricUpdate.setTarget = target;
+      metricUpdate.setTarget =
+          await (callService.getAverageCallPerformanceByMonth(i));
       metricDbHelper.updateMetric(metricUpdate);
     }
   }
