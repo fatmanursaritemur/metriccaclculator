@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:metriccalculator/pages/calories_section/calories.dart';
 import 'package:metriccalculator/utils/model/metric.dart';
 import 'package:metriccalculator/utils/repo/metric-dbconnections.dart';
 import 'package:flutter/services.dart';
@@ -8,16 +6,16 @@ import 'package:metriccalculator/utils/service/metricService.dart';
 
 MetricDbHelper helper = MetricDbHelper();
 
-class TodoDetail extends StatefulWidget {
+class MetricDetail extends StatefulWidget {
   final List<Metric> metricList;
   bool isEdit;
-  TodoDetail(this.metricList, this.isEdit);
+  MetricDetail(this.metricList, this.isEdit);
 
   @override
-  State<StatefulWidget> createState() => TodoDetailState(metricList, isEdit);
+  State<StatefulWidget> createState() => MetricDetailState(metricList, isEdit);
 }
 
-class TodoDetailState extends State<TodoDetail> {
+class MetricDetailState extends State<MetricDetail> {
   final globalKey = GlobalKey<ScaffoldState>();
   List<Metric> metricList;
   bool isEditt;
@@ -33,7 +31,7 @@ class TodoDetailState extends State<TodoDetail> {
     titleController.text = metricList[0].target.toString();
   }
 
-  TodoDetailState(this.metricList, this.isEdit);
+  MetricDetailState(this.metricList, this.isEdit);
 
   @override
   Widget build(BuildContext context) {

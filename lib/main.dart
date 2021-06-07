@@ -1,16 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:metriccalculator/pages/calories_section/calories.dart';
-import 'package:metriccalculator/pages/main_page.dart';
-import 'package:metriccalculator/utils/model/metric.dart';
-import 'package:metriccalculator/utils/repo/call-dbconnections.dart';
-import 'package:metriccalculator/utils/service/metricService.dart';
+import 'package:metriccalculator/pages/metric.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   final pages = <String, WidgetBuilder>{
-    MainPage.tag: (context) => MainPage(),
-    CaloriesPage.tag: (context) => CaloriesPage(),
+    MetricPage.tag: (context) => MetricPage(),
   };
 
   @override
@@ -20,7 +15,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         fontFamily: 'Oswald',
       ),
-      home: CaloriesPage(),
+      home: MetricPage(),
       routes: pages,
     );
   }

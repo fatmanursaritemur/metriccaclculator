@@ -20,13 +20,9 @@ class CallService {
     String data = await rootBundle.loadString('assets/new.json');
     List<Call> list = new List();
     var jsonlist = jsonDecode(data.toString()) as List;
-    print("json'un uzunluğu ${jsonlist.length}");
     jsonlist.forEach((e) {
       callDbHelper.insertCall(Call.fromMap(e));
     });
-    print("************************");
-    print("eklemeler bitttiii");
-    print("************************");
   }
 
   getCallList() async {
@@ -43,22 +39,12 @@ class CallService {
   Future<List<Call>> getCallListByMonth(int month) async {
     int startDate = 990000 + month * 100;
     int endDate = 990000 + (month + 1) * 100;
-
     List todosFuture = await callDbHelper.getCallByMonth(startDate, endDate);
-    /*todosFuture.then((result) {
-      //List<Call> todoList = List<Call>();
-      for (int i = 0; i < result.length; i++) {
-        this.calllistMonthly.add(Call.fromObject(result[i]));
-        print(callList[i].server);
-      }
-    });*/
     return todosFuture;
   }
 
   Future<int> getTotalCallsNumberByMonth(int month) async {
     List<Call> callList = await getCallListByMonth(month);
-
-    //return this.calllistMonthly.length;
     return ((callList.length + 10000) / 100).toInt();
   }
 

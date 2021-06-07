@@ -38,24 +38,13 @@ class MetricService {
   }
 
   Future<List<Metric>> getMetricByNameAndTarget(String name) async {
-    print("****name and target*****");
     List<Metric> metricFuture =
         await metricDbHelper.getMetricByNameAndType(name, "target");
-    print("metric için target'a gekdi");
-    metricFuture.forEach((element) {
-      print("elementler eldi ${element}");
-    });
-    /* metricFuture.then((result) {
-      //List<Call> todoList = List<Call>();
-      for (int i = 0; i < result.length; i++) {
-        this.metricTargetListByName.add(Metric.fromObject(result[i]));
-      }
-    });*/
+    metricFuture.forEach((element) {});
     return metricFuture;
   }
 
   Future<List<Metric>> getMetricByNameAndActual(String name) async {
-    print("*****name and actual****");
     List<Metric> metricFuture =
         await metricDbHelper.getMetricByNameAndType(name, "actual");
     return metricFuture;

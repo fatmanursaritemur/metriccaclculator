@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:metriccalculator/pages/tododetail.dart';
+import 'package:metriccalculator/pages/metricdetail.dart';
 import 'package:metriccalculator/utils/model/metric.dart';
 import 'package:metriccalculator/utils/service/metricService.dart';
-import 'dart:math';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
-class CaloriesPage extends StatefulWidget {
+class MetricPage extends StatefulWidget {
   static String tag = 'calories-page';
   @override
-  _CaloriesPageState createState() => _CaloriesPageState();
+  _MetricPageState createState() => _MetricPageState();
 }
 
-class _CaloriesPageState extends State<CaloriesPage> {
+class _MetricPageState extends State<MetricPage> {
   List<Metric> metricList = List<Metric>();
   List<Metric> metricTarget = List<Metric>();
   List<Metric> metricActual = List<Metric>();
@@ -20,27 +19,20 @@ class _CaloriesPageState extends State<CaloriesPage> {
   int index = 0;
   bool isSelected = false;
   List<Widget> caloriesDownColumn = [];
-
   List<Widget> caloriesUpColumn = [];
-
   List<String> actual = List.filled(12, " 0");
   List<String> target = List.filled(12, " 0");
 
   hydiol(String name) async {
-    print("hydra ol'a girdi");
     List<Metric> targetMetric =
         await metricService.getMetricByNameAndTarget(name);
-    print("target'ı aldı");
     List<Metric> actualMetric =
         await metricService.getMetricByNameAndActual(name);
-    print("actualı aldı");
     setState(() {
-      // metricList = itemsKeysList;
       List<String> tTarget = new List<String>();
       List<String> tActual = new List<String>();
       metricTarget = targetMetric;
       metricActual = actualMetric;
-      print("sssss $metricActual");
       metricTarget.forEach((element) {
         tTarget.add(element.target.toString());
       });
@@ -616,15 +608,12 @@ class _CaloriesPageState extends State<CaloriesPage> {
   void navigateToDetail(List<Metric> metricTarget) async {
     bool result = await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => TodoDetail(metricTarget, false)),
+      MaterialPageRoute(
+          builder: (context) => MetricDetail(metricTarget, false)),
     );
   }
 
   Widget _getFAB(BuildContext context) {
-    //   if (isSelected == false) {
-    //   print("secim yapılmadı");
-    // } else {
-    //https://stackoverflow.com/questions/55166999/how-to-make-two-floating-action-button-in-flutter
     return SpeedDial(
         animatedIcon: AnimatedIcons.menu_close,
         animatedIconTheme: IconThemeData(size: 22),
